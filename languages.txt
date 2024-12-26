@@ -1,0 +1,19 @@
+zh-CN|Chinese
+nl|Dutch
+en|English
+eo|Esperanto
+fr|French
+fr-CA|French (Canada)
+de|German
+hi|Hindi
+id|Indonesian
+it|Italian
+ja|Japanese
+ko|Korean
+la|Latin
+pt|Portuguese (Brazil)
+pt-PT|Portuguese (Portugal)
+ru|Russian
+sr|Serbian
+es|Spanish
+uk|Ukrainian
