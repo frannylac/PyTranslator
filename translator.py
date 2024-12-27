@@ -197,6 +197,8 @@ class GTranslatorGui:
         # Icons
         self._iconReload = f"{ICONS_FOLDER}reload.png"
         self.__checkIcon(self._iconReload)
+        self._iconRepeat = f"{ICONS_FOLDER}repeat.png"
+        self.__checkIcon(self._iconRepeat)
 
         self._rootSize = (500, 350)
         self._root = tk.Tk()
@@ -251,7 +253,7 @@ class GTranslatorGui:
         self._fromLabel.config(font=('Calibri', 14))
         self._fromLabel.config(padx=8, pady=4)
         self._fromLabel.config(text=GTranslatorGui.Txt.LANG_FROM)
-        self._fromLabel.place(x=0, y=45)
+        self._fromLabel.place(x=0, y=43)
 
         self._sourceLangValue = tk.StringVar()
         self._sourceLangValue.set(G_DEFAULT_LANG_FROM)
@@ -267,12 +269,24 @@ class GTranslatorGui:
         self._sourceLangOM.config(font=('Calibri', 14))
         self._sourceLangOM.place(x=60, y=42)
 
+        switchIcon = ImageTk.PhotoImage(Image.open(self._iconRepeat))
+        self._switchButton = tk.Button(self._mainFrame)
+        self._switchButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
+        self._switchButton.config(background='#424242', activebackground='#424242')
+        self._switchButton.config(borderwidth=0)
+        self._switchButton.config(cursor='hand1')
+        self._switchButton.config(height=28, width=30)
+        self._switchButton.config(padx=8, pady=4)
+        self._switchButton.config(image=switchIcon)
+        self._switchButton.config(command=self.__on_click_switchLangs)
+        self._switchButton.place(x=164, y=41)
+
         self._toLabel = tk.Label(self._mainFrame)
         self._toLabel.config(background="#424242")
         self._toLabel.config(font=('Calibri', 14))
-        self._toLabel.config(padx=8, pady=4)
+        self._toLabel.config(padx=4, pady=4)
         self._toLabel.config(text=GTranslatorGui.Txt.LANG_TO)
-        self._toLabel.place(x=165, y=45)
+        self._toLabel.place(x=200, y=43)
 
         self._targetLangValue = tk.StringVar()
         self._targetLangValue.set(G_DEFAULT_LANG_TARGET)
@@ -286,7 +300,7 @@ class GTranslatorGui:
         self._targetLangOM.config(background='#373737')
         self._targetLangOM['menu'].config(background='#373737')
         self._targetLangOM.config(font=('Calibri', 14))
-        self._targetLangOM.place(x=203, y=42)
+        self._targetLangOM.place(x=234, y=42)
 
         # Reset button
         reloadIcon = ImageTk.PhotoImage(Image.open(self._iconReload))
@@ -295,12 +309,11 @@ class GTranslatorGui:
         self._resetButton.config(background='#424242', activebackground='#424242')
         self._resetButton.config(borderwidth=0)
         self._resetButton.config(cursor='hand1')
-        self._resetButton.config(height=31, width=30)
+        self._resetButton.config(height=30, width=30)
         self._resetButton.config(padx=8, pady=4)
-        self._resetButton.config(relief=tk.FLAT)
         self._resetButton.config(image=reloadIcon)
         self._resetButton.config(command=self.__on_click_resetButton)
-        self._resetButton.place(x=350, y=43)
+        self._resetButton.place(x=350, y=40)
 
         # Translate button
         self._translateButton = tk.Button(self._mainFrame)
@@ -311,7 +324,7 @@ class GTranslatorGui:
         self._translateButton.config(padx=8, pady=4)
         self._translateButton.config(text=GTranslatorGui.Txt.TRANSLATE_BUTTON)
         self._translateButton.config(command=self.__on_click_translateButton)
-        self._translateButton.place(x=398, y=43)
+        self._translateButton.place(x=398, y=41)
         # ----------------------------------------------------------------------------
 
         # Third row
@@ -439,6 +452,13 @@ class GTranslatorGui:
                 # self._translationText.config(state=tk.DISABLED)
 
         self._translateButton.config(state=tk.NORMAL)
+
+    def __on_click_switchLangs(self):
+        '''Switch option menus languages.'''
+        source = self._sourceLangValue.get()
+        target = self._targetLangValue.get()
+        self._sourceLangValue.set(target)
+        self._targetLangValue.set(source)
 
     def __on_select_optionMenu(self, widget):
         '''Deletes translation text at language option change'''
