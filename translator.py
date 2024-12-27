@@ -282,7 +282,7 @@ class GTranslatorGui:
         self._switchButton.config(padx=8, pady=4)
         self._switchButton.config(image=switchIcon)
         self._switchButton.config(command=self.__on_click_switchLangs)
-        self._switchButton.place(x=364, y=65)
+        self._switchButton.place(x=366, y=65)
 
         self._toLabel = tk.Label(self._mainFrame)
         self._toLabel.config(background="#424242")
