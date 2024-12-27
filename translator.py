@@ -200,7 +200,7 @@ class GTranslatorGui:
         self._iconRepeat = f"{ICONS_FOLDER}repeat.png"
         self.__checkIcon(self._iconRepeat)
 
-        self._rootSize = (500, 400)
+        self._rootSize = (500, 388)
         self._root = tk.Tk()
         self._root.protocol('WV_DELETE_WINDOW', self.__on_close)
         # Make floating window
