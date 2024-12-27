@@ -200,6 +200,8 @@ class GTranslatorGui:
         self.__checkIcon(self._iconRepeat)
         self._iconLanguage = f"{ICONS_FOLDER}language.png"
         self.__checkIcon(self._iconLanguage)
+        self._iconPaste = f"{ICONS_FOLDER}paste.png"
+        self.__checkIcon(self._iconPaste)
 
         self._rootSize = (500, 388)
         self._root = tk.Tk()
@@ -273,17 +275,6 @@ class GTranslatorGui:
         self._sourceLangOM['menu'].config(background='#373737')
         self._sourceLangOM.place(x=60, y=42)
 
-        switchIcon = ImageTk.PhotoImage(Image.open(self._iconRepeat))
-        self._switchButton = tk.Button(self._mainFrame)
-        self._switchButton.config(background='#424242', activebackground='#424242')
-        self._switchButton.config(borderwidth=0)
-        self._switchButton.config(cursor='hand1')
-        self._switchButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
-        self._switchButton.config(padx=8, pady=4)
-        self._switchButton.config(image=switchIcon)
-        self._switchButton.config(command=self.__on_click_switchLangs)
-        self._switchButton.place(x=366, y=65)
-
         self._toLabel = tk.Label(self._mainFrame)
         self._toLabel.config(background="#424242")
         self._toLabel.config(font=('Calibri', 14))
@@ -306,6 +297,30 @@ class GTranslatorGui:
         self._targetLangOM.config(font=('Calibri', 14))
         self._targetLangOM['menu'].config(background='#373737')
         self._targetLangOM.place(x=60, y=82)
+
+        # Switch languages button
+        switchIcon = ImageTk.PhotoImage(Image.open(self._iconRepeat))
+        self._switchButton = tk.Button(self._mainFrame)
+        self._switchButton.config(background='#424242', activebackground='#424242')
+        self._switchButton.config(borderwidth=0)
+        self._switchButton.config(cursor='hand1')
+        self._switchButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
+        self._switchButton.config(padx=8, pady=4)
+        self._switchButton.config(image=switchIcon)
+        self._switchButton.config(command=self.__on_click_switchLangs)
+        self._switchButton.place(x=321, y=65)
+
+        # Paste button
+        pasteIcon = ImageTk.PhotoImage(Image.open(self._iconPaste))
+        self._pasteButton = tk.Button(self._mainFrame)
+        self._pasteButton.config(background='#424242', activebackground='#424242')
+        self._pasteButton.config(borderwidth=0)
+        self._pasteButton.config(cursor='hand1')
+        self._pasteButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
+        self._pasteButton.config(padx=8, pady=4)
+        self._pasteButton.config(image=pasteIcon)
+        self._pasteButton.config(command=self.__on_click_pasteSource)
+        self._pasteButton.place(x=362, y=62)
 
         # Reset button
         reloadIcon = ImageTk.PhotoImage(Image.open(self._iconReload))
@@ -460,6 +475,11 @@ class GTranslatorGui:
                 # self._translationText.config(state=tk.DISABLED)
 
         self._translateButton.config(state=tk.NORMAL)
+
+    def __on_click_pasteSource(self):
+        '''Reads clipboard and set source text.'''
+        self._sourceText.delete('1.0', tk.END)
+        self._sourceText.insert('1.0', pyperclip.paste())
 
     def __on_click_switchLangs(self):
         '''Switch option menus languages.'''
