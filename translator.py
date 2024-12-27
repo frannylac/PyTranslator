@@ -186,7 +186,6 @@ class GTranslatorGui:
         LISTEN_SOURCE = 'Source'
         LISTEN_TRANSLATION = 'Translation'
         TITLE = 'PyTranslator'
-        TRANSLATE_BUTTON = 'Translate'
 
     def __init__(self, x: float=0, y: float=0, origenText: str=""):
         '''Creates a floating window at x,y position.'''
@@ -199,6 +198,8 @@ class GTranslatorGui:
         self.__checkIcon(self._iconReload)
         self._iconRepeat = f"{ICONS_FOLDER}repeat.png"
         self.__checkIcon(self._iconRepeat)
+        self._iconLanguage = f"{ICONS_FOLDER}language.png"
+        self.__checkIcon(self._iconLanguage)
 
         self._rootSize = (500, 388)
         self._root = tk.Tk()
@@ -274,15 +275,14 @@ class GTranslatorGui:
 
         switchIcon = ImageTk.PhotoImage(Image.open(self._iconRepeat))
         self._switchButton = tk.Button(self._mainFrame)
-        self._switchButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
         self._switchButton.config(background='#424242', activebackground='#424242')
         self._switchButton.config(borderwidth=0)
         self._switchButton.config(cursor='hand1')
-        self._switchButton.config(height=28, width=30)
+        self._switchButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
         self._switchButton.config(padx=8, pady=4)
         self._switchButton.config(image=switchIcon)
         self._switchButton.config(command=self.__on_click_switchLangs)
-        self._switchButton.place(x=315, y=65)
+        self._switchButton.place(x=364, y=65)
 
         self._toLabel = tk.Label(self._mainFrame)
         self._toLabel.config(background="#424242")
@@ -310,27 +310,27 @@ class GTranslatorGui:
         # Reset button
         reloadIcon = ImageTk.PhotoImage(Image.open(self._iconReload))
         self._resetButton = tk.Button(self._mainFrame)
-        self._resetButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
         self._resetButton.config(background='#424242', activebackground='#424242')
         self._resetButton.config(borderwidth=0)
         self._resetButton.config(cursor='hand1')
-        self._resetButton.config(height=30, width=30)
+        self._resetButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
         self._resetButton.config(padx=8, pady=4)
         self._resetButton.config(image=reloadIcon)
         self._resetButton.config(command=self.__on_click_resetButton)
-        self._resetButton.place(x=355, y=62)
+        self._resetButton.place(x=404, y=62)
 
         # Translate button
+        languageIcon = ImageTk.PhotoImage(Image.open(self._iconLanguage))
         self._translateButton = tk.Button(self._mainFrame)
-        self._translateButton.config(activebackground='#4b4b4b', activeforeground='#FAFAFA')
-        self._translateButton.config(background='#373737', foreground='#F5F5F5')
+        self._translateButton.config(activebackground='#424242')
+        self._translateButton.config(background='#424242')
+        self._translateButton.config(borderwidth=0)
         self._translateButton.config(cursor='hand1')
-        self._translateButton.config(font=('Calibri', 14))
-        self._translateButton.config(highlightthickness=0)
+        self._translateButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
         self._translateButton.config(padx=8, pady=4)
-        self._translateButton.config(text=GTranslatorGui.Txt.TRANSLATE_BUTTON)
+        self._translateButton.config(image=languageIcon)
         self._translateButton.config(command=self.__on_click_translateButton)
-        self._translateButton.place(x=398, y=62)
+        self._translateButton.place(x=447, y=62) #398
         # ----------------------------------------------------------------------------
 
         # Third row
