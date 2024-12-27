@@ -6,6 +6,7 @@ import pyautogui
 import pyperclip
 import tkinter as tk
 from io import BytesIO
+from PIL import Image, ImageTk
 from pydub import AudioSegment
 from pydub.playback import play as playAudio
 from os.path import exists
@@ -19,6 +20,7 @@ from urllib.parse import quote
 G_SUPPORTED_LANGUAGES_FILE = 'languages.txt'
 G_DEFAULT_LANG_FROM = 'English'
 G_DEFAULT_LANG_TARGET = 'Spanish'
+ICONS_FOLDER = 'icons/'
 
 class Colors:
     HEADER = '\033[95m'
@@ -192,6 +194,10 @@ class GTranslatorGui:
 
         self._supportedLangs = load_supported_langs()
 
+        # Icons
+        self._iconReload = f"{ICONS_FOLDER}reload.png"
+        self.__checkIcon(self._iconReload)
+
         self._rootSize = (500, 350)
         self._root = tk.Tk()
         self._root.protocol('WV_DELETE_WINDOW', self.__on_close)
@@ -226,8 +232,11 @@ class GTranslatorGui:
         self._sourceText = tk.Text(self._mainFrame)
         self._sourceText.bind('<Control-a>', self.__selectAll)
         self._sourceText.bind('<Control-v>', self.__paste)
+        self._sourceText.bind('<Return>', self.__on_keyup_catch_enter)
         self._sourceText.config(background='#757575')
+        self._sourceText.config(border=0)
         self._sourceText.config(font=('Calibri', 14))
+        self._sourceText.config(highlightthickness=0)
         self._sourceText.config(padx=4, pady=3)
         # height: 1 line
         # width: 38 chars
@@ -252,6 +261,7 @@ class GTranslatorGui:
                 *self._supportedLangs.keys(),
                 command=self.__on_select_optionMenu
             )
+        self._sourceLangOM.config(highlightthickness=0)
         self._sourceLangOM.config(background='#373737')
         self._sourceLangOM['menu'].config(background='#373737')
         self._sourceLangOM.config(font=('Calibri', 14))
@@ -272,16 +282,32 @@ class GTranslatorGui:
                 *self._supportedLangs.keys(),
                 command=self.__on_select_optionMenu
             )
+        self._targetLangOM.config(highlightthickness=0)
         self._targetLangOM.config(background='#373737')
         self._targetLangOM['menu'].config(background='#373737')
         self._targetLangOM.config(font=('Calibri', 14))
         self._targetLangOM.place(x=203, y=42)
+
+        # Reset button
+        reloadIcon = ImageTk.PhotoImage(Image.open(self._iconReload))
+        self._resetButton = tk.Button(self._mainFrame)
+        self._resetButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
+        self._resetButton.config(background='#424242', activebackground='#424242')
+        self._resetButton.config(borderwidth=0)
+        self._resetButton.config(cursor='hand1')
+        self._resetButton.config(height=31, width=30)
+        self._resetButton.config(padx=8, pady=4)
+        self._resetButton.config(relief=tk.FLAT)
+        self._resetButton.config(image=reloadIcon)
+        self._resetButton.config(command=self.__on_click_resetButton)
+        self._resetButton.place(x=350, y=43)
 
         # Translate button
         self._translateButton = tk.Button(self._mainFrame)
         self._translateButton.config(background='#373737', foreground='#F5F5F5')
         self._translateButton.config(cursor='hand1')
         self._translateButton.config(font=('Calibri', 14))
+        self._translateButton.config(highlightthickness=0)
         self._translateButton.config(padx=8, pady=4)
         self._translateButton.config(text=GTranslatorGui.Txt.TRANSLATE_BUTTON)
         self._translateButton.config(command=self.__on_click_translateButton)
@@ -295,6 +321,7 @@ class GTranslatorGui:
         self._translationText.bind('<Control-v>', self.__paste)
         self._translationText.config(background='#757575')
         self._translationText.config(font=('Calibri', 14))
+        self._translationText.config(highlightthickness=0)
         self._translationText.config(padx=4, pady=3)
         self._translationText.config(state=tk.DISABLED)
         self._translationText.config(height=10, width=48)
@@ -315,6 +342,7 @@ class GTranslatorGui:
         self._listenSourceButton.config(command=lambda : self.__on_click_listen(self._listenSourceButton))
         self._listenSourceButton.config(cursor='hand1')
         self._listenSourceButton.config(font=('Calibri', 14))
+        self._listenSourceButton.config(highlightthickness=0)
         self._listenSourceButton.config(padx=8, pady=4)
         self._listenSourceButton.config(text=GTranslatorGui.Txt.LISTEN_SOURCE)
         self._listenSourceButton.place(x=300, y=306)
@@ -324,6 +352,7 @@ class GTranslatorGui:
         self._listenTranslationButton.config(command=lambda : self.__on_click_listen(self._listenTranslationButton))
         self._listenTranslationButton.config(cursor='hand1')
         self._listenTranslationButton.config(font=('Calibri', 14))
+        self._listenTranslationButton.config(highlightthickness=0)
         self._listenTranslationButton.config(padx=8, pady=4)
         self._listenTranslationButton.config(text=GTranslatorGui.Txt.LISTEN_TRANSLATION)
         self._listenTranslationButton.place(x=384, y=306)
@@ -336,7 +365,12 @@ class GTranslatorGui:
 
         self._root.mainloop()
 
-    def _error(self, msg):
+    def __checkIcon(self, iconPath):
+        '''Check if icon exists or die.'''
+        if not exists(iconPath):
+            error(f"Icon '{iconPath}' do not found!")
+
+    def __error(self, msg):
         '''Show an error throw messagebox'''
         return messagebox.showerror(
             message=msg,
@@ -361,9 +395,17 @@ class GTranslatorGui:
                 if len(translationText) > 0:
                     GTranslator().speech(translationText, self._supportedLangs[self._targetLangValue.get()]).play()
         except Exception as e:
-            self._error(e)
+            self.__error(e)
         finally:
             widget.config(state=tk.NORMAL)
+
+    def __on_click_resetButton(self):
+        '''Reset gui.'''
+        self._sourceText.delete('1.0', tk.END)
+        self._translationText.delete('1.0', tk.END)
+        self._translationText.config(state=tk.DISABLED)
+        self._sourceLangValue.set(G_DEFAULT_LANG_FROM)
+        self._targetLangValue.set(G_DEFAULT_LANG_TARGET)
 
     def __on_click_translateButton(self):
         '''Translate text'''
@@ -389,7 +431,7 @@ class GTranslatorGui:
                         targetLang=self._supportedLangs[self._targetLangValue.get()]
                     ).query(origenText)
             except Exception as e:
-                self._error(e)
+                self.__error(e)
             else:
                 self._translationText.config(state=tk.NORMAL)
                 self._translationText.insert('1.0', t.translation)
@@ -401,6 +443,11 @@ class GTranslatorGui:
     def __on_select_optionMenu(self, widget):
         '''Deletes translation text at language option change'''
         self._translationText.delete('1.0', tk.END)
+
+    def __on_keyup_catch_enter(self, e):
+        '''Catch <Return> (Enter) and call translator method'''
+        self.__on_click_translateButton()
+        return 'break'
 
     def __paste(self, e):
         '''Manage ^v event.'''
