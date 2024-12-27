@@ -263,11 +263,13 @@ class GTranslatorGui:
                 *self._supportedLangs.keys(),
                 command=self.__on_select_optionMenu
             )
-        self._sourceLangOM.config(highlightthickness=0)
         self._sourceLangOM.config(background='#373737')
+        self._sourceLangOM.config(activebackground='#4b4b4b', activeforeground='#FAFAFA')
+        self._sourceLangOM.config(cursor='hand1')
+        self._sourceLangOM.config(highlightthickness=0)
         self._sourceLangOM.config(justify='left')
-        self._sourceLangOM['menu'].config(background='#373737')
         self._sourceLangOM.config(font=('Calibri', 14))
+        self._sourceLangOM['menu'].config(background='#373737')
         self._sourceLangOM.place(x=60, y=42)
 
         switchIcon = ImageTk.PhotoImage(Image.open(self._iconRepeat))
@@ -297,10 +299,12 @@ class GTranslatorGui:
                 *self._supportedLangs.keys(),
                 command=self.__on_select_optionMenu
             )
-        self._targetLangOM.config(highlightthickness=0)
+        self._targetLangOM.config(activebackground='#4b4b4b', activeforeground='#FAFAFA')
         self._targetLangOM.config(background='#373737')
-        self._targetLangOM['menu'].config(background='#373737')
+        self._targetLangOM.config(cursor='hand1')
+        self._targetLangOM.config(highlightthickness=0)
         self._targetLangOM.config(font=('Calibri', 14))
+        self._targetLangOM['menu'].config(background='#373737')
         self._targetLangOM.place(x=60, y=82)
 
         # Reset button
@@ -318,6 +322,7 @@ class GTranslatorGui:
 
         # Translate button
         self._translateButton = tk.Button(self._mainFrame)
+        self._translateButton.config(activebackground='#4b4b4b', activeforeground='#FAFAFA')
         self._translateButton.config(background='#373737', foreground='#F5F5F5')
         self._translateButton.config(cursor='hand1')
         self._translateButton.config(font=('Calibri', 14))
@@ -352,6 +357,7 @@ class GTranslatorGui:
         self._listenLabel.place(x=232, y=347)
 
         self._listenSourceButton = tk.Button(self._mainFrame)
+        self._listenSourceButton.config(activebackground='#4b4b4b', activeforeground='#FAFAFA')
         self._listenSourceButton.config(background='#373737', foreground='#F5F5F5')
         self._listenSourceButton.config(command=lambda : self.__on_click_listen(self._listenSourceButton))
         self._listenSourceButton.config(cursor='hand1')
@@ -362,6 +368,7 @@ class GTranslatorGui:
         self._listenSourceButton.place(x=300, y=346)
 
         self._listenTranslationButton = tk.Button(self._mainFrame)
+        self._listenTranslationButton.config(activebackground='#4b4b4b', activeforeground='#FAFAFA')
         self._listenTranslationButton.config(background='#373737', foreground='#F5F5F5')
         self._listenTranslationButton.config(command=lambda : self.__on_click_listen(self._listenTranslationButton))
         self._listenTranslationButton.config(cursor='hand1')
