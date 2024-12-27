@@ -5,6 +5,8 @@
 # 1: icon file
 # 2: output size
 
+bg_color="#212830"
+
 # Test convert
 if [[ -z $(which convert) ]]; then
     echo "[Error] imagemagick not installed!"
@@ -28,4 +30,4 @@ if [[ $out_width -le 0 ]]; then
     exit 1
 fi
 
-convert -background '#424242' -resize "${out_width}"x $icon_file $png_file
+convert -background "$bg_color" -resize "${out_width}"x $icon_file $png_file
