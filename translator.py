@@ -468,6 +468,16 @@ class GTranslatorGui:
         self._sourceLangValue.set(target)
         self._targetLangValue.set(source)
 
+        # Do translation
+        sourceText = self._sourceText.get('1.0', tk.END)[:-1]
+        translationText = self._translationText.get('1.0', tk.END)[:-1]
+        if len(sourceText) > 0 and len(translationText) > 0:
+            self._sourceText.delete('1.0', tk.END)
+            self._sourceText.insert('1.0', translationText)
+            self._translationText.delete('1.0', tk.END)
+            self._translationText.insert('1.0', sourceText)
+            self.__on_click_translateButton()
+
     def __on_select_optionMenu(self, widget):
         '''Deletes translation text at language option change'''
         self._translationText.delete('1.0', tk.END)
