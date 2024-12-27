@@ -36,7 +36,7 @@ I use Ubuntu widh dwm, dmenu and clipmenu as a minimal setup, i think it shoud r
 
 ## Screenshots
 
-![image](https://github.com/user-attachments/assets/de7fd0fc-e052-48e6-ada3-a4c7af25117a)
+![image](https://github.com/user-attachments/assets/04bcbd34-14d0-4e4d-ad8d-22bcf8424d22)
 
 As you can see is a minimal gui with dark mode, you can customize/modify everything as you like, but becarefull night reading with day mode colors could fry your eyes.
 
