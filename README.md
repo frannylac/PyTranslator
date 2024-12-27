@@ -12,6 +12,13 @@ If you look at [translator.py](https://github.com/frannylac/PyTranslator/blob/a2
 
 I think is clear now **why**.
 
+## Instalation
+
+- If you doesn't have pip installed, proceed with it installation [here](https://pip.pypa.io/en/stable/installation/).
+- Python3.8+ is required (i didn't tested with another version).
+
+`pip3 install -r requirements.txt`
+
 ## Operation modes
 - `--cli` Waits at terminal level for any clipboard contents and print translation on it.
 - `--listener-gui` Waits as running process for any clipboard contents and show the gui with the content already translated. (Usefull for read documents outside browser). But becarefull, everything you copy will be sended to Google's API servers.
