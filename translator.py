@@ -200,13 +200,13 @@ class GTranslatorGui:
         self._iconRepeat = f"{ICONS_FOLDER}repeat.png"
         self.__checkIcon(self._iconRepeat)
 
-        self._rootSize = (500, 350)
+        self._rootSize = (500, 400)
         self._root = tk.Tk()
         self._root.protocol('WV_DELETE_WINDOW', self.__on_close)
         # Make floating window
         self._root.wm_attributes('-type', 'dialog')
         self._root.title(GTranslatorGui.Txt.TITLE)
-        # self._root.resizable(width=False, height=False)
+        self._root.resizable(width=False, height=False)
 
         # Position of window (on dimensions overflow, window is centered at middle of screen)
         if x < 0 or x + self._rootSize[0] > self._root.winfo_screenwidth():
@@ -265,6 +265,7 @@ class GTranslatorGui:
             )
         self._sourceLangOM.config(highlightthickness=0)
         self._sourceLangOM.config(background='#373737')
+        self._sourceLangOM.config(justify='left')
         self._sourceLangOM['menu'].config(background='#373737')
         self._sourceLangOM.config(font=('Calibri', 14))
         self._sourceLangOM.place(x=60, y=42)
@@ -279,14 +280,14 @@ class GTranslatorGui:
         self._switchButton.config(padx=8, pady=4)
         self._switchButton.config(image=switchIcon)
         self._switchButton.config(command=self.__on_click_switchLangs)
-        self._switchButton.place(x=164, y=41)
+        self._switchButton.place(x=315, y=65)
 
         self._toLabel = tk.Label(self._mainFrame)
         self._toLabel.config(background="#424242")
         self._toLabel.config(font=('Calibri', 14))
-        self._toLabel.config(padx=4, pady=4)
+        self._toLabel.config(padx=8, pady=4)
         self._toLabel.config(text=GTranslatorGui.Txt.LANG_TO)
-        self._toLabel.place(x=200, y=43)
+        self._toLabel.place(x=0, y=83)
 
         self._targetLangValue = tk.StringVar()
         self._targetLangValue.set(G_DEFAULT_LANG_TARGET)
@@ -300,7 +301,7 @@ class GTranslatorGui:
         self._targetLangOM.config(background='#373737')
         self._targetLangOM['menu'].config(background='#373737')
         self._targetLangOM.config(font=('Calibri', 14))
-        self._targetLangOM.place(x=234, y=42)
+        self._targetLangOM.place(x=60, y=82)
 
         # Reset button
         reloadIcon = ImageTk.PhotoImage(Image.open(self._iconReload))
@@ -313,7 +314,7 @@ class GTranslatorGui:
         self._resetButton.config(padx=8, pady=4)
         self._resetButton.config(image=reloadIcon)
         self._resetButton.config(command=self.__on_click_resetButton)
-        self._resetButton.place(x=350, y=40)
+        self._resetButton.place(x=355, y=62)
 
         # Translate button
         self._translateButton = tk.Button(self._mainFrame)
@@ -324,7 +325,7 @@ class GTranslatorGui:
         self._translateButton.config(padx=8, pady=4)
         self._translateButton.config(text=GTranslatorGui.Txt.TRANSLATE_BUTTON)
         self._translateButton.config(command=self.__on_click_translateButton)
-        self._translateButton.place(x=398, y=41)
+        self._translateButton.place(x=398, y=62)
         # ----------------------------------------------------------------------------
 
         # Third row
@@ -338,7 +339,7 @@ class GTranslatorGui:
         self._translationText.config(padx=4, pady=3)
         self._translationText.config(state=tk.DISABLED)
         self._translationText.config(height=10, width=48)
-        self._translationText.place(x=0, y=88)
+        self._translationText.place(x=0, y=126)
         # ----------------------------------------------------------------------------
 
         # Fourth row
@@ -348,7 +349,7 @@ class GTranslatorGui:
         self._listenLabel.config(font=('Calibri', 14))
         self._listenLabel.config(padx=8, pady=4)
         self._listenLabel.config(text=GTranslatorGui.Txt.LISTEN)
-        self._listenLabel.place(x=228, y=308)
+        self._listenLabel.place(x=232, y=347)
 
         self._listenSourceButton = tk.Button(self._mainFrame)
         self._listenSourceButton.config(background='#373737', foreground='#F5F5F5')
@@ -358,7 +359,7 @@ class GTranslatorGui:
         self._listenSourceButton.config(highlightthickness=0)
         self._listenSourceButton.config(padx=8, pady=4)
         self._listenSourceButton.config(text=GTranslatorGui.Txt.LISTEN_SOURCE)
-        self._listenSourceButton.place(x=300, y=306)
+        self._listenSourceButton.place(x=300, y=346)
 
         self._listenTranslationButton = tk.Button(self._mainFrame)
         self._listenTranslationButton.config(background='#373737', foreground='#F5F5F5')
@@ -368,7 +369,7 @@ class GTranslatorGui:
         self._listenTranslationButton.config(highlightthickness=0)
         self._listenTranslationButton.config(padx=8, pady=4)
         self._listenTranslationButton.config(text=GTranslatorGui.Txt.LISTEN_TRANSLATION)
-        self._listenTranslationButton.place(x=384, y=306)
+        self._listenTranslationButton.place(x=384, y=346)
         # ----------------------------------------------------------------------------
 
         # Quick translation
