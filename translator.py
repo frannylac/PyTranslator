@@ -258,6 +258,7 @@ class GTranslatorGui:
         self._sourceText.config(font=('Calibri', 14))
         self._sourceText.config(foreground=GTranslatorGui.Colors.TEXT_COLOR)
         self._sourceText.config(highlightthickness=0)
+        self._sourceText.config(insertbackground=GTranslatorGui.Colors.TEXT_COLOR)
         self._sourceText.config(padx=4, pady=3)
         self._sourceText.tag_config('tag', background="red")
         # height: 1 line
@@ -393,6 +394,7 @@ class GTranslatorGui:
         self._translationText.config(font=('Calibri', 14))
         self._translationText.config(foreground=GTranslatorGui.Colors.TEXT_COLOR)
         self._translationText.config(highlightthickness=0)
+        self._translationText.config(insertbackground=GTranslatorGui.Colors.TEXT_COLOR)
         self._translationText.config(padx=4, pady=3)
         self._translationText.config(state=tk.DISABLED)
         self._translationText.config(height=10, width=48)
