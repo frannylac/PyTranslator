@@ -178,6 +178,7 @@ class ClipboardTranslator:
 
 class GTranslatorGui:
     '''Small gui for translator'''
+
     class Txt:
         ERROR = 'Error'
         LANG_FROM = 'From'
@@ -186,6 +187,21 @@ class GTranslatorGui:
         LISTEN_SOURCE = 'Source'
         LISTEN_TRANSLATION = 'Translation'
         TITLE = 'PyTranslator'
+
+    class Colors:
+        BACKGROUND = '#212830'
+        BUTTON_BACKGROUND = '#2a313c'
+        BUTTON_BACKGROUND_ACTIVE = '#2f3742'
+        BUTTON_TEXT_COLOR = '#d1d7e0'
+        LABEL_TEXT_COLOR = '#d1d7e0'
+        OPTION_MENU_BACKGROUND = '#2a313c'
+        OPTION_MENU_BACKGROUND_ACTIVE = '#2f3742'
+        OPTION_MENU_MENU_BACKGROUND = '#212830'
+        OPTION_MENU_TEXT_COLOR = '#d1d7e0'
+        OPTION_MENU_MENU_TEXT_COLOR = '#d1d7e0'
+        TEXT_BACKGROUND = '#2b353f'
+        TEXT_COLOR = '#d1d7e0'
+        TEXT_TAG_BACKGROUND = '#5F748A'
 
     def __init__(self, x: float=0, y: float=0, origenText: str=""):
         '''Creates a floating window at x,y position.'''
@@ -224,7 +240,7 @@ class GTranslatorGui:
 
         # Main Frame Widget
         self._mainFrame = tk.Frame(self._root)
-        self._mainFrame.config(background='#424242')
+        self._mainFrame.config(background=GTranslatorGui.Colors.BACKGROUND)
         self._mainFrame.config(height=self._rootSize[1])
         self._mainFrame.config(width=self._rootSize[0])
         self._mainFrame.config(padx=4, pady=4)
@@ -233,16 +249,17 @@ class GTranslatorGui:
         # First row
         # ----------------------------------------------------------------------------
         # Input text to translate
-        # fix: implementar ctrl-a para seleccionar todo
         self._sourceText = tk.Text(self._mainFrame)
         self._sourceText.bind('<Control-a>', self.__selectAll)
         self._sourceText.bind('<Control-v>', self.__paste)
         self._sourceText.bind('<Return>', self.__on_keyup_catch_enter)
-        self._sourceText.config(background='#757575')
+        self._sourceText.config(background=GTranslatorGui.Colors.TEXT_BACKGROUND)
         self._sourceText.config(border=0)
         self._sourceText.config(font=('Calibri', 14))
+        self._sourceText.config(foreground=GTranslatorGui.Colors.TEXT_COLOR)
         self._sourceText.config(highlightthickness=0)
         self._sourceText.config(padx=4, pady=3)
+        self._sourceText.tag_config('tag', background="red")
         # height: 1 line
         # width: 38 chars
         self._sourceText.config(height=1, width=48)
@@ -252,7 +269,8 @@ class GTranslatorGui:
         # Second row
         # ----------------------------------------------------------------------------
         self._fromLabel = tk.Label(self._mainFrame)
-        self._fromLabel.config(background="#424242")
+        self._fromLabel.config(background=GTranslatorGui.Colors.BACKGROUND)
+        self._fromLabel.config(foreground=GTranslatorGui.Colors.LABEL_TEXT_COLOR)
         self._fromLabel.config(font=('Calibri', 14))
         self._fromLabel.config(padx=8, pady=4)
         self._fromLabel.config(text=GTranslatorGui.Txt.LANG_FROM)
@@ -266,17 +284,21 @@ class GTranslatorGui:
                 *self._supportedLangs.keys(),
                 command=self.__on_select_optionMenu
             )
-        self._sourceLangOM.config(background='#373737')
-        self._sourceLangOM.config(activebackground='#4b4b4b', activeforeground='#FAFAFA')
+        self._sourceLangOM.config(background=GTranslatorGui.Colors.OPTION_MENU_BACKGROUND)
+        self._sourceLangOM.config(activebackground=GTranslatorGui.Colors.OPTION_MENU_BACKGROUND_ACTIVE)
+        self._sourceLangOM.config(activeforeground=GTranslatorGui.Colors.OPTION_MENU_TEXT_COLOR)
         self._sourceLangOM.config(cursor='hand1')
+        self._sourceLangOM.config(foreground=GTranslatorGui.Colors.OPTION_MENU_TEXT_COLOR)
         self._sourceLangOM.config(highlightthickness=0)
         self._sourceLangOM.config(justify='left')
         self._sourceLangOM.config(font=('Calibri', 14))
-        self._sourceLangOM['menu'].config(background='#373737')
+        self._sourceLangOM['menu'].config(background=GTranslatorGui.Colors.OPTION_MENU_MENU_BACKGROUND)
+        self._sourceLangOM['menu'].config(foreground=GTranslatorGui.Colors.OPTION_MENU_MENU_TEXT_COLOR)
         self._sourceLangOM.place(x=60, y=42)
 
         self._toLabel = tk.Label(self._mainFrame)
-        self._toLabel.config(background="#424242")
+        self._toLabel.config(background=GTranslatorGui.Colors.BACKGROUND)
+        self._toLabel.config(foreground=GTranslatorGui.Colors.LABEL_TEXT_COLOR)
         self._toLabel.config(font=('Calibri', 14))
         self._toLabel.config(padx=8, pady=4)
         self._toLabel.config(text=GTranslatorGui.Txt.LANG_TO)
@@ -290,21 +312,27 @@ class GTranslatorGui:
                 *self._supportedLangs.keys(),
                 command=self.__on_select_optionMenu
             )
-        self._targetLangOM.config(activebackground='#4b4b4b', activeforeground='#FAFAFA')
-        self._targetLangOM.config(background='#373737')
+        self._targetLangOM.config(activebackground=GTranslatorGui.Colors.OPTION_MENU_BACKGROUND_ACTIVE)
+        self._targetLangOM.config(activeforeground=GTranslatorGui.Colors.OPTION_MENU_TEXT_COLOR)
+        self._targetLangOM.config(background=GTranslatorGui.Colors.OPTION_MENU_BACKGROUND)
         self._targetLangOM.config(cursor='hand1')
+        self._targetLangOM.config(foreground=GTranslatorGui.Colors.OPTION_MENU_TEXT_COLOR)
         self._targetLangOM.config(highlightthickness=0)
         self._targetLangOM.config(font=('Calibri', 14))
-        self._targetLangOM['menu'].config(background='#373737')
+        self._targetLangOM['menu'].config(background=GTranslatorGui.Colors.OPTION_MENU_MENU_BACKGROUND)
+        self._targetLangOM['menu'].config(foreground=GTranslatorGui.Colors.OPTION_MENU_MENU_TEXT_COLOR)
         self._targetLangOM.place(x=60, y=82)
 
         # Switch languages button
         switchIcon = ImageTk.PhotoImage(Image.open(self._iconRepeat))
         self._switchButton = tk.Button(self._mainFrame)
-        self._switchButton.config(background='#424242', activebackground='#424242')
+        self._switchButton.config(background=GTranslatorGui.Colors.BACKGROUND)
+        self._switchButton.config(activebackground=GTranslatorGui.Colors.BACKGROUND)
         self._switchButton.config(borderwidth=0)
         self._switchButton.config(cursor='hand1')
-        self._switchButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
+        self._switchButton.config(highlightthickness=0)
+        self._switchButton.config(highlightbackground=GTranslatorGui.Colors.BACKGROUND)
+        self._switchButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
         self._switchButton.config(padx=8, pady=4)
         self._switchButton.config(image=switchIcon)
         self._switchButton.config(command=self.__on_click_switchLangs)
@@ -313,10 +341,13 @@ class GTranslatorGui:
         # Paste button
         pasteIcon = ImageTk.PhotoImage(Image.open(self._iconPaste))
         self._pasteButton = tk.Button(self._mainFrame)
-        self._pasteButton.config(background='#424242', activebackground='#424242')
+        self._pasteButton.config(background=GTranslatorGui.Colors.BACKGROUND)
+        self._pasteButton.config(activebackground=GTranslatorGui.Colors.BACKGROUND)
         self._pasteButton.config(borderwidth=0)
         self._pasteButton.config(cursor='hand1')
-        self._pasteButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
+        self._pasteButton.config(highlightthickness=0)
+        self._pasteButton.config(highlightbackground=GTranslatorGui.Colors.BACKGROUND)
+        self._pasteButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
         self._pasteButton.config(padx=8, pady=4)
         self._pasteButton.config(image=pasteIcon)
         self._pasteButton.config(command=self.__on_click_pasteSource)
@@ -325,10 +356,13 @@ class GTranslatorGui:
         # Reset button
         reloadIcon = ImageTk.PhotoImage(Image.open(self._iconReload))
         self._resetButton = tk.Button(self._mainFrame)
-        self._resetButton.config(background='#424242', activebackground='#424242')
+        self._resetButton.config(background=GTranslatorGui.Colors.BACKGROUND)
+        self._resetButton.config(activebackground=GTranslatorGui.Colors.BACKGROUND)
         self._resetButton.config(borderwidth=0)
         self._resetButton.config(cursor='hand1')
-        self._resetButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
+        self._resetButton.config(highlightthickness=0)
+        self._resetButton.config(highlightbackground=GTranslatorGui.Colors.BACKGROUND)
+        self._resetButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
         self._resetButton.config(padx=8, pady=4)
         self._resetButton.config(image=reloadIcon)
         self._resetButton.config(command=self.__on_click_resetButton)
@@ -337,11 +371,13 @@ class GTranslatorGui:
         # Translate button
         languageIcon = ImageTk.PhotoImage(Image.open(self._iconLanguage))
         self._translateButton = tk.Button(self._mainFrame)
-        self._translateButton.config(activebackground='#424242')
-        self._translateButton.config(background='#424242')
+        self._translateButton.config(activebackground=GTranslatorGui.Colors.BACKGROUND)
+        self._translateButton.config(background=GTranslatorGui.Colors.BACKGROUND)
         self._translateButton.config(borderwidth=0)
         self._translateButton.config(cursor='hand1')
-        self._translateButton.config(highlightthickness=0, highlightbackground='#424242', highlightcolor='#424242')
+        self._translateButton.config(highlightthickness=0)
+        self._translateButton.config(highlightbackground=GTranslatorGui.Colors.BACKGROUND)
+        self._translateButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
         self._translateButton.config(padx=8, pady=4)
         self._translateButton.config(image=languageIcon)
         self._translateButton.config(command=self.__on_click_translateButton)
@@ -353,8 +389,9 @@ class GTranslatorGui:
         self._translationText = tk.Text(self._mainFrame)
         self._translationText.bind('<Control-a>', self.__selectAll)
         self._translationText.bind('<Control-v>', self.__paste)
-        self._translationText.config(background='#757575')
+        self._translationText.config(background=GTranslatorGui.Colors.TEXT_BACKGROUND)
         self._translationText.config(font=('Calibri', 14))
+        self._translationText.config(foreground=GTranslatorGui.Colors.TEXT_COLOR)
         self._translationText.config(highlightthickness=0)
         self._translationText.config(padx=4, pady=3)
         self._translationText.config(state=tk.DISABLED)
@@ -365,15 +402,18 @@ class GTranslatorGui:
         # Fourth row
         # ----------------------------------------------------------------------------
         self._listenLabel = tk.Label(self._mainFrame)
-        self._listenLabel.config(background="#424242")
+        self._listenLabel.config(background=GTranslatorGui.Colors.BACKGROUND)
+        self._listenLabel.config(foreground=GTranslatorGui.Colors.LABEL_TEXT_COLOR)
         self._listenLabel.config(font=('Calibri', 14))
         self._listenLabel.config(padx=8, pady=4)
         self._listenLabel.config(text=GTranslatorGui.Txt.LISTEN)
         self._listenLabel.place(x=232, y=347)
 
         self._listenSourceButton = tk.Button(self._mainFrame)
-        self._listenSourceButton.config(activebackground='#4b4b4b', activeforeground='#FAFAFA')
-        self._listenSourceButton.config(background='#373737', foreground='#F5F5F5')
+        self._listenSourceButton.config(activebackground=GTranslatorGui.Colors.BUTTON_BACKGROUND_ACTIVE)
+        self._listenSourceButton.config(activeforeground=GTranslatorGui.Colors.BUTTON_TEXT_COLOR)
+        self._listenSourceButton.config(background=GTranslatorGui.Colors.BUTTON_BACKGROUND)
+        self._listenSourceButton.config(foreground=GTranslatorGui.Colors.BUTTON_TEXT_COLOR)
         self._listenSourceButton.config(command=lambda : self.__on_click_listen(self._listenSourceButton))
         self._listenSourceButton.config(cursor='hand1')
         self._listenSourceButton.config(font=('Calibri', 14))
@@ -383,8 +423,10 @@ class GTranslatorGui:
         self._listenSourceButton.place(x=300, y=346)
 
         self._listenTranslationButton = tk.Button(self._mainFrame)
-        self._listenTranslationButton.config(activebackground='#4b4b4b', activeforeground='#FAFAFA')
-        self._listenTranslationButton.config(background='#373737', foreground='#F5F5F5')
+        self._listenTranslationButton.config(activebackground=GTranslatorGui.Colors.BUTTON_BACKGROUND_ACTIVE)
+        self._listenTranslationButton.config(activeforeground=GTranslatorGui.Colors.BUTTON_TEXT_COLOR)
+        self._listenTranslationButton.config(background=GTranslatorGui.Colors.BUTTON_BACKGROUND)
+        self._listenTranslationButton.config(foreground=GTranslatorGui.Colors.BUTTON_TEXT_COLOR)
         self._listenTranslationButton.config(command=lambda : self.__on_click_listen(self._listenTranslationButton))
         self._listenTranslationButton.config(cursor='hand1')
         self._listenTranslationButton.config(font=('Calibri', 14))
