@@ -339,21 +339,6 @@ class GTranslatorGui:
         self._switchButton.config(command=self.__on_click_switchLangs)
         self._switchButton.place(x=321, y=65)
 
-        # Paste button
-        pasteIcon = ImageTk.PhotoImage(Image.open(self._iconPaste))
-        self._pasteButton = tk.Button(self._mainFrame)
-        self._pasteButton.config(background=GTranslatorGui.Colors.BACKGROUND)
-        self._pasteButton.config(activebackground=GTranslatorGui.Colors.BACKGROUND)
-        self._pasteButton.config(borderwidth=0)
-        self._pasteButton.config(cursor='hand1')
-        self._pasteButton.config(highlightthickness=0)
-        self._pasteButton.config(highlightbackground=GTranslatorGui.Colors.BACKGROUND)
-        self._pasteButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
-        self._pasteButton.config(padx=8, pady=4)
-        self._pasteButton.config(image=pasteIcon)
-        self._pasteButton.config(command=self.__on_click_pasteSource)
-        self._pasteButton.place(x=362, y=62)
-
         # Reset button
         reloadIcon = ImageTk.PhotoImage(Image.open(self._iconReload))
         self._resetButton = tk.Button(self._mainFrame)
@@ -367,7 +352,22 @@ class GTranslatorGui:
         self._resetButton.config(padx=8, pady=4)
         self._resetButton.config(image=reloadIcon)
         self._resetButton.config(command=self.__on_click_resetButton)
-        self._resetButton.place(x=404, y=62)
+        self._resetButton.place(x=362, y=62)
+        
+        # Paste button
+        pasteIcon = ImageTk.PhotoImage(Image.open(self._iconPaste))
+        self._pasteButton = tk.Button(self._mainFrame)
+        self._pasteButton.config(background=GTranslatorGui.Colors.BACKGROUND)
+        self._pasteButton.config(activebackground=GTranslatorGui.Colors.BACKGROUND)
+        self._pasteButton.config(borderwidth=0)
+        self._pasteButton.config(cursor='hand1')
+        self._pasteButton.config(highlightthickness=0)
+        self._pasteButton.config(highlightbackground=GTranslatorGui.Colors.BACKGROUND)
+        self._pasteButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
+        self._pasteButton.config(padx=8, pady=4)
+        self._pasteButton.config(image=pasteIcon)
+        self._pasteButton.config(command=self.__on_click_pasteSource)
+        self._pasteButton.place(x=404, y=62)
 
         # Translate button
         languageIcon = ImageTk.PhotoImage(Image.open(self._iconLanguage))
