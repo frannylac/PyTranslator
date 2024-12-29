@@ -662,7 +662,10 @@ def main():
     elif '--clipboard-detection' in argv or '-cbd' in argv:
         while True:
             try:
-                data = pyperclip.waitForNewPaste()
+                data = pyperclip.paste()
+                if len(data) == 0 or data == ' ':
+                    sleep(.2)
+                    continue
                 x, y = pyautogui.position()
                 x = x + 10
                 y = y + 15
@@ -675,6 +678,7 @@ def main():
             except KeyboardInterrupt:
                 info("Manually Abborted!")
                 break
+            sleep(.2)
 
     elif '--gui' in argv:
         GTranslatorGui()
