@@ -21,7 +21,7 @@ I think is clear now **why**.
 
 ## Operation modes
 - `--cli` Waits at terminal level for any clipboard contents and print translation on it.
-- `--listener-gui` Waits as running process for any clipboard contents and show the gui with the content already translated. (Usefull for read documents outside browser). But becarefull, everything you copy will be sended to Google's API servers.
+- `--clipboard-detection` | `-cbd` Waits as running process for any clipboard contents and show the gui with the content already translated. (Usefull for read documents outside browser). But becarefull, everything you copy will be sended to Google's API servers.
 - `--gui` Show the gui to user interactive use.
 
 ## Listener mode
