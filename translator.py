@@ -9,6 +9,7 @@ from io import BytesIO
 from PIL import Image, ImageTk
 from pydub import AudioSegment
 from pydub.playback import play as playAudio
+# from pynput.mouse import Button, Listener
 from os.path import exists
 from time import sleep, time
 from tkinter import messagebox
@@ -55,6 +56,49 @@ def load_supported_langs() -> dict:
 
     with open(G_SUPPORTED_LANGUAGES_FILE, 'r') as f:
         return dict([(l.split('|')[1], l.split('|')[0]) for l in f.read().split("\n")])
+
+# class MouseLeftClick:
+#     '''Listen mouse left click.'''
+
+#     def __init__(self):
+#         self._doubleClickTimeMargin = 0.3 # seconds
+#         self._lastClickAt = 0
+#         self._leftClickCallback = lambda x,y: None
+#         self._doubleLeftClickCallback = lambda x,y: None
+
+#     def _on_click(self, x, y, button, pressed):
+#         '''Detect mouse events.
+#         - Left double click'''
+#         if pressed and button == Button.left:
+#             clickAt = time()
+
+#             # Reset last click time
+#             if clickAt - self._lastClickAt > self._doubleClickTimeMargin:
+#                 self._lastClickAt = 0
+
+#             # Register first click
+#             if self._lastClickAt == 0:
+#                 self._lastClickAt = clickAt
+#                 self._leftClickCallback(x, y)
+#                 return
+
+#             # Register second click
+#             if clickAt - self._lastClickAt < self._doubleClickTimeMargin:
+#                 self._lastClickAt = 0
+#                 self._doubleLeftClickCallback(x, y)
+#                 return
+
+#     def setLeftClickCallback(self, cb):
+#         self._leftClickCallback = cb
+
+#     def setDoubleLeftClickCallback(self, cb):
+#         self._doubleLeftClickCallback = cb
+
+#     def listen(self):
+#         l = Listener(on_click=self._on_click)
+#         l.start()
+#         l.join()
+
 
 class GTranslatorError(Exception):
     pass
@@ -153,11 +197,11 @@ class ClipboardTranslator:
         destLang: destination language to translate to
         '''
         sleep(1) # FOR AVOID GOOGLE RATE LIMIT
-        self.__transl = GTranslator(sourceLang=srcLang, targetLang=destLang)
+        self._transl = GTranslator(sourceLang=srcLang, targetLang=destLang)
 
-    def __translate(self, text: str) -> str:
+    def _translate(self, text: str) -> str:
         '''Do translate text'''
-        return self.__transl.query(text).translation
+        return self._transl.query(text).translation
 
     def run(self)-> None:
         '''Run translation process'''
@@ -167,7 +211,7 @@ class ClipboardTranslator:
                 text = pyperclip.waitForNewPaste()
                 print( f"{Colors.WARNING}[Translating...]{Colors.ENDC}: {text}" )
                 try:
-                    text = self.__translate(text)
+                    text = self._translate(text)
                     print( f"{Colors.WARNING}[Result]{Colors.ENDC}: {text}", end='\n\n' )
                 except Exception:
                     error(quit=False, msg="Rate limit!\n")
@@ -216,17 +260,17 @@ class GTranslatorGui:
 
         # Icons
         self._iconReload = f"{ICONS_FOLDER}reload.png"
-        self.__checkIcon(self._iconReload)
+        self._checkIcon(self._iconReload)
         self._iconRepeat = f"{ICONS_FOLDER}repeat.png"
-        self.__checkIcon(self._iconRepeat)
+        self._checkIcon(self._iconRepeat)
         self._iconLanguage = f"{ICONS_FOLDER}language.png"
-        self.__checkIcon(self._iconLanguage)
+        self._checkIcon(self._iconLanguage)
         self._iconPaste = f"{ICONS_FOLDER}paste.png"
-        self.__checkIcon(self._iconPaste)
+        self._checkIcon(self._iconPaste)
 
         self._rootSize = (500, 390)
         self._root = tk.Tk()
-        self._root.protocol('WV_DELETE_WINDOW', self.__on_close)
+        self._root.protocol('WV_DELETE_WINDOW', self._on_close)
         # Make floating window
         self._root.wm_attributes('-type', 'dialog')
         self._root.title(GTranslatorGui.Txt.TITLE)
@@ -255,9 +299,9 @@ class GTranslatorGui:
         # ----------------------------------------------------------------------------
         # Input text to translate
         self._sourceText = tk.Text(self._mainFrame)
-        self._sourceText.bind('<Control-a>', self.__selectAll)
-        self._sourceText.bind('<Control-v>', self.__paste)
-        self._sourceText.bind('<Return>', self.__on_keyup_catch_enter)
+        self._sourceText.bind('<Control-a>', self._selectAll)
+        self._sourceText.bind('<Control-v>', self._paste)
+        self._sourceText.bind('<Return>', self._on_keyup_catch_enter)
         self._sourceText.config(background=GTranslatorGui.Colors.TEXT_BACKGROUND)
         self._sourceText.config(border=0)
         self._sourceText.config(font=('Calibri', 14))
@@ -291,7 +335,7 @@ class GTranslatorGui:
                 self._mainFrame,
                 self._sourceLangValue,
                 *self._supportedLangs.keys(),
-                command=self.__on_select_optionMenu
+                command=self._on_select_optionMenu
             )
         self._sourceLangOM.config(background=GTranslatorGui.Colors.OPTION_MENU_BACKGROUND)
         self._sourceLangOM.config(activebackground=GTranslatorGui.Colors.OPTION_MENU_BACKGROUND_ACTIVE)
@@ -323,7 +367,7 @@ class GTranslatorGui:
                 self._mainFrame,
                 self._targetLangValue,
                 *self._supportedLangs.keys(),
-                command=self.__on_select_optionMenu
+                command=self._on_select_optionMenu
             )
         self._targetLangOM.config(activebackground=GTranslatorGui.Colors.OPTION_MENU_BACKGROUND_ACTIVE)
         self._targetLangOM.config(activeforeground=GTranslatorGui.Colors.OPTION_MENU_TEXT_COLOR)
@@ -352,7 +396,7 @@ class GTranslatorGui:
         self._switchButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
         self._switchButton.config(padx=8, pady=4)
         self._switchButton.config(image=switchIcon)
-        self._switchButton.config(command=self.__on_click_switchLangs)
+        self._switchButton.config(command=self._on_click_switchLangs)
         self._switchButton.place(x=321, y=65)
 
         # Reset button
@@ -367,7 +411,7 @@ class GTranslatorGui:
         self._resetButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
         self._resetButton.config(padx=8, pady=4)
         self._resetButton.config(image=reloadIcon)
-        self._resetButton.config(command=self.__on_click_resetButton)
+        self._resetButton.config(command=self._on_click_resetButton)
         self._resetButton.place(x=362, y=62)
         
         # Paste button
@@ -382,7 +426,7 @@ class GTranslatorGui:
         self._pasteButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
         self._pasteButton.config(padx=8, pady=4)
         self._pasteButton.config(image=pasteIcon)
-        self._pasteButton.config(command=self.__on_click_pasteSource)
+        self._pasteButton.config(command=self._on_click_pasteSource)
         self._pasteButton.place(x=404, y=62)
 
         # Translate button
@@ -397,15 +441,15 @@ class GTranslatorGui:
         self._translateButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
         self._translateButton.config(padx=8, pady=4)
         self._translateButton.config(image=languageIcon)
-        self._translateButton.config(command=self.__on_click_translateButton)
+        self._translateButton.config(command=self._on_click_translateButton)
         self._translateButton.place(x=447, y=62) #398
         # ----------------------------------------------------------------------------
 
         # Third row
         # ----------------------------------------------------------------------------
         self._translationText = tk.Text(self._mainFrame)
-        self._translationText.bind('<Control-a>', self.__selectAll)
-        self._translationText.bind('<Control-v>', self.__paste)
+        self._translationText.bind('<Control-a>', self._selectAll)
+        self._translationText.bind('<Control-v>', self._paste)
         self._translationText.config(background=GTranslatorGui.Colors.TEXT_BACKGROUND)
         self._translationText.config(font=('Calibri', 14))
         self._translationText.config(foreground=GTranslatorGui.Colors.TEXT_COLOR)
@@ -435,7 +479,7 @@ class GTranslatorGui:
         self._listenSourceButton.config(activeforeground=GTranslatorGui.Colors.BUTTON_TEXT_COLOR)
         self._listenSourceButton.config(background=GTranslatorGui.Colors.BUTTON_BACKGROUND)
         self._listenSourceButton.config(foreground=GTranslatorGui.Colors.BUTTON_TEXT_COLOR)
-        self._listenSourceButton.config(command=lambda : self.__on_click_listen(self._listenSourceButton))
+        self._listenSourceButton.config(command=lambda : self._on_click_listen(self._listenSourceButton))
         self._listenSourceButton.config(cursor='hand1')
         self._listenSourceButton.config(font=('Calibri', 14))
         self._listenSourceButton.config(highlightthickness=1)
@@ -450,7 +494,7 @@ class GTranslatorGui:
         self._listenTranslationButton.config(activeforeground=GTranslatorGui.Colors.BUTTON_TEXT_COLOR)
         self._listenTranslationButton.config(background=GTranslatorGui.Colors.BUTTON_BACKGROUND)
         self._listenTranslationButton.config(foreground=GTranslatorGui.Colors.BUTTON_TEXT_COLOR)
-        self._listenTranslationButton.config(command=lambda : self.__on_click_listen(self._listenTranslationButton))
+        self._listenTranslationButton.config(command=lambda : self._on_click_listen(self._listenTranslationButton))
         self._listenTranslationButton.config(cursor='hand1')
         self._listenTranslationButton.config(font=('Calibri', 14))
         self._listenTranslationButton.config(highlightbackground=GTranslatorGui.Colors.BUTTON_HIGHLIGHT_BACKGROUND)
@@ -464,16 +508,16 @@ class GTranslatorGui:
         # Quick translation
         if len(origenText) > 0:
             self._sourceText.insert('1.0', origenText)
-            self.__on_click_translateButton()
+            self._on_click_translateButton()
 
         self._root.mainloop()
 
-    def __checkIcon(self, iconPath):
+    def _checkIcon(self, iconPath):
         '''Check if icon exists or die.'''
         if not exists(iconPath):
             error(f"Icon '{iconPath}' do not found!")
 
-    def __error(self, msg):
+    def _error(self, msg):
         '''Show an error throw messagebox'''
         return messagebox.showerror(
             message=msg,
@@ -481,11 +525,11 @@ class GTranslatorGui:
             parent=self._root
         )
 
-    def __on_close(self):
+    def _on_close(self):
         '''Closes app.'''
         self._root.destroy()
 
-    def __on_click_listen(self, widget):
+    def _on_click_listen(self, widget):
         '''Play origen/translation text'''
         widget.config(state=tk.DISABLED)
         try:
@@ -498,11 +542,11 @@ class GTranslatorGui:
                 if len(translationText) > 0:
                     GTranslator().speech(translationText, self._supportedLangs[self._targetLangValue.get()]).play()
         except Exception as e:
-            self.__error(e)
+            self._error(e)
         finally:
             widget.config(state=tk.NORMAL)
 
-    def __on_click_resetButton(self):
+    def _on_click_resetButton(self):
         '''Reset gui.'''
         self._sourceText.delete('1.0', tk.END)
         self._translationText.delete('1.0', tk.END)
@@ -510,7 +554,7 @@ class GTranslatorGui:
         self._sourceLangValue.set(G_DEFAULT_LANG_FROM)
         self._targetLangValue.set(G_DEFAULT_LANG_TARGET)
 
-    def __on_click_translateButton(self):
+    def _on_click_translateButton(self):
         '''Translate text'''
         self._translateButton.config(state=tk.DISABLED)
         origenText = self._sourceText.get("1.0", tk.END)[:-1]
@@ -534,7 +578,7 @@ class GTranslatorGui:
                         targetLang=self._supportedLangs[self._targetLangValue.get()]
                     ).query(origenText)
             except Exception as e:
-                self.__error(e)
+                self._error(e)
             else:
                 self._translationText.config(state=tk.NORMAL)
                 self._translationText.insert('1.0', t.translation)
@@ -543,12 +587,12 @@ class GTranslatorGui:
 
         self._translateButton.config(state=tk.NORMAL)
 
-    def __on_click_pasteSource(self):
+    def _on_click_pasteSource(self):
         '''Reads clipboard and set source text.'''
         self._sourceText.delete('1.0', tk.END)
         self._sourceText.insert('1.0', pyperclip.paste())
 
-    def __on_click_switchLangs(self):
+    def _on_click_switchLangs(self):
         '''Switch option menus languages.'''
         source = self._sourceLangValue.get()
         target = self._targetLangValue.get()
@@ -563,18 +607,18 @@ class GTranslatorGui:
             self._sourceText.insert('1.0', translationText)
             self._translationText.delete('1.0', tk.END)
             self._translationText.insert('1.0', sourceText)
-            self.__on_click_translateButton()
+            self._on_click_translateButton()
 
-    def __on_select_optionMenu(self, widget):
+    def _on_select_optionMenu(self, widget):
         '''Deletes translation text at language option change'''
         self._translationText.delete('1.0', tk.END)
 
-    def __on_keyup_catch_enter(self, e):
+    def _on_keyup_catch_enter(self, e):
         '''Catch <Return> (Enter) and call translator method'''
-        self.__on_click_translateButton()
+        self._on_click_translateButton()
         return 'break'
 
-    def __paste(self, e):
+    def _paste(self, e):
         '''Manage ^v event.'''
         tranges = e.widget.tag_ranges(tk.SEL)
 
@@ -591,7 +635,7 @@ class GTranslatorGui:
 
         return 'break'
 
-    def __selectAll(self, e):
+    def _selectAll(self, e):
         '''Generate '<<SelectAll>>' virtual event at e.widget.'''
         e.widget.event_generate('<<SelectAll>>')
 
@@ -601,23 +645,37 @@ class GTranslatorGui:
 
         return 'break'
 
+    # @staticmethod
+    # def doubleClickClipboardDetection(x: float, y: float):
+    #     info(f"Mouse position (double click): x: {x}; y: {y}")
+    #     data = pyperclip.paste()
+    #     # is data?
+    #     if len(data) > 0 and data != ' ':
+    #         pyperclip.copy(' ') # clean clipboard copying blank space
+    #         x = x + 10
+    #         y = y + 15
+    #         GTranslatorGui(x, y, data)
 
 def main():
     if '--cli' in argv:
         ClipboardTranslator().run()
-    elif '--listener-gui' in argv:
+    elif '--clipboard-detection' in argv or '-cbd' in argv:
         while True:
             try:
-                clipContent = pyperclip.waitForNewPaste()
+                data = pyperclip.waitForNewPaste()
                 x, y = pyautogui.position()
                 x = x + 10
                 y = y + 15
                 info(f"Mouse position: x: {x}; y: {y}")
-                GTranslatorGui(x, y, clipContent)
-                pyperclip.copy('') # clean clipboard
+                GTranslatorGui(x, y, data)
+                pyperclip.copy(' ') # clean clipboard
+                # mlc = MouseLeftClick()
+                # mlc.setDoubleLeftClickCallback(GTranslatorGui.doubleClickClipboardDetection)
+                # mlc.listen()
             except KeyboardInterrupt:
                 info("Manually Abborted!")
                 break
+
     elif '--gui' in argv:
         GTranslatorGui()
 
