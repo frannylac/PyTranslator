@@ -267,6 +267,8 @@ class GTranslatorGui:
         self._checkIcon(self._iconLanguage)
         self._iconPaste = f"{ICONS_FOLDER}paste.png"
         self._checkIcon(self._iconPaste)
+        self._iconErase = f"{ICONS_FOLDER}erase.png"
+        self._checkIcon(self._iconErase)
 
         self._rootSize = (500, 390)
         self._root = tk.Tk()
@@ -397,10 +399,11 @@ class GTranslatorGui:
         self._switchButton.config(padx=8, pady=4)
         self._switchButton.config(image=switchIcon)
         self._switchButton.config(command=self._on_click_switchLangs)
-        self._switchButton.place(x=321, y=65)
+        self._switchButton.place(x=325, y=65)
 
         # Reset button
-        reloadIcon = ImageTk.PhotoImage(Image.open(self._iconReload))
+        # reloadIcon = ImageTk.PhotoImage(Image.open(self._iconReload))
+        eraseIcon = ImageTk.PhotoImage(Image.open(self._iconErase))
         self._resetButton = tk.Button(self._mainFrame)
         self._resetButton.config(background=GTranslatorGui.Colors.BACKGROUND)
         self._resetButton.config(activebackground=GTranslatorGui.Colors.BACKGROUND)
@@ -410,9 +413,9 @@ class GTranslatorGui:
         self._resetButton.config(highlightbackground=GTranslatorGui.Colors.BACKGROUND)
         self._resetButton.config(highlightcolor=GTranslatorGui.Colors.BACKGROUND)
         self._resetButton.config(padx=8, pady=4)
-        self._resetButton.config(image=reloadIcon)
+        self._resetButton.config(image=eraseIcon)
         self._resetButton.config(command=self._on_click_resetButton)
-        self._resetButton.place(x=362, y=62)
+        self._resetButton.place(x=360, y=63)
         
         # Paste button
         pasteIcon = ImageTk.PhotoImage(Image.open(self._iconPaste))
